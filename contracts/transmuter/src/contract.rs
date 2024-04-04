@@ -92,7 +92,7 @@ impl Transmuter<'_> {
                 .init(deps.storage, deps.api.addr_validate(&admin)?)?;
         }
 
-        // set moderator if exists
+        // set moderator if exists.
         if let Some(moderator) = moderator {
             self.role
                 .moderator

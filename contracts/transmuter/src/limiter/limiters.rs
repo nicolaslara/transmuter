@@ -163,6 +163,9 @@ impl ChangeLimiter {
         Ok(updated_limiter)
     }
 
+    // Not blocking, but I found the name update as bit confusing since we're
+    // doing limiter.update() (which calls this function), and limiters.update()
+    // which is Map::update.
     fn update(self, block_time: Timestamp, value: Decimal) -> Result<Self, ContractError> {
         let mut updated_limiter = self;
 

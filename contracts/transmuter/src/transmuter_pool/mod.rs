@@ -69,6 +69,7 @@ impl TransmuterPool {
     }
 
     pub fn get_pool_asset_by_denom(&self, denom: &'_ str) -> Result<&'_ Asset, ContractError> {
+        // This could be a map, but shouldn't matter as MAX_POOL_ASSET_DENOMS is small
         self.pool_assets
             .iter()
             .find(|pool_asset| pool_asset.denom() == denom)
@@ -86,6 +87,9 @@ impl TransmuterPool {
         &self,
         coins: &[Coin],
     ) -> Result<Vec<(Coin, Uint128)>, ContractError> {
+        // This is O(n*m) where n is the number of coins and m is the number of pool assets
+        // This could be optimized but in terms of security it only matters if the callers aren't paying for gas
+        // which I don't think is the case. Also pools with large number of assets would not be approved by gov.
         coins
             .iter()
             .map(|coin| {

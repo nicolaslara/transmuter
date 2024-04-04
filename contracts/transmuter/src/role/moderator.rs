@@ -26,6 +26,8 @@ impl<'a> Moderator<'a> {
     }
 
     pub(super) fn set(&self, deps: DepsMut, address: Addr) -> Result<(), ContractError> {
+        // we are not checking the sender here, as we are doing in the admin.
+        // This is done inside Role. Nothing to do, just noting the difference.
         self.moderator
             .save(deps.storage, &address)
             .map_err(Into::into)

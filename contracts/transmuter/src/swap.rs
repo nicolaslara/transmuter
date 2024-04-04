@@ -169,7 +169,7 @@ impl Transmuter<'_> {
                 token_in_amount,
             } => {
                 let token_out_norm_factor = pool
-                    .get_pool_asset_by_denom(token_out_denom)?
+                    .get_pool_asset_by_denom(token_out_denom)? // Here is where we ensure that the token is in the pool
                     .normalization_factor();
                 let out_amount = swap_from_alloyed::out_amount_via_exact_in(
                     token_in_amount,
@@ -236,10 +236,11 @@ impl Transmuter<'_> {
             }
 
             // no need to check shares sufficiency since it requires pre-sending shares to the contract
-            BurnTarget::SentFunds => Ok(&env.contract.address),
+            BurnTarget::SentFunds => Ok(&env.contract.address), // Have we checked that the funds were sent? shouldn't that happen here?
         }?
         .to_string();
 
+        // Not sure I understand this. Can you explain it?
         let is_force_exit_corrupted_assets = tokens_out.iter().all(|coin| {
             let total_liquidity = pool
                 .get_pool_asset_by_denom(&coin.denom)
